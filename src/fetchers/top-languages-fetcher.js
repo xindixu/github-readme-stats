@@ -17,6 +17,7 @@ const fetcher = (variables, token) => {
           repositories(ownerAffiliations: OWNER, isFork: false, first: 100) {
             nodes {
               name
+              isArchived
               languages(first: 10, orderBy: {field: SIZE, direction: DESC}) {
                 edges {
                   size
@@ -69,7 +70,7 @@ async function fetchTopLanguages(username, exclude_repo = []) {
   repoNodes = repoNodes
     .sort((a, b) => b.size - a.size)
     .filter((name) => {
-      return !repoToHide[name.name];
+      return !repoToHide[name.name] && !name.isArchived;
     });
 
   repoNodes = repoNodes
